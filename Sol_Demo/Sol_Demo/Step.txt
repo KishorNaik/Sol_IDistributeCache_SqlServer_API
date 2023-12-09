@@ -1,0 +1,71 @@
+Step 1:
+Download the following package.
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+     <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.0" />
+
+Step 2:
+Create a Infrastructure folder, Create Entity Folder.
+    Create a UserEntity.cs File. [Check Source Code]
+
+Step 3:
+Create a Db Context File in infrastucture folder.
+    Check `ApplicationDbContext.ts` file. [Check Source Code]
+
+Step 4:
+Register the DbContext In Program.ts file.
+
+Step 5:
+Installing the Tool
+    dotnet tool install --global dotnet-ef
+    dotnet tool update --global dotnet-ef
+
+Step 6:
+Create Sql cache table using sql-cache tool
+dotnet tool install --global dotnet-sql-cache
+dotnet sql-cache create "Data Source=DESKTOP-JM6N8TL;Initial Catalog=CacheDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False" dbo Cache
+
+OR
+
+Manually create DB and Table
+
+CREATE DATABASE SQLCache
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DbCache](
+	[Id] [nvarchar](449) NOT NULL,
+	[Value] [varbinary](max) NOT NULL,
+	[ExpiresAtTime] [datetimeoffset](7) NOT NULL,
+	[SlidingExpirationInSeconds] [bigint] NULL,
+	[AbsoluteExpiration] [datetimeoffset](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, 
+	IGNORE_DUP_KEY = OFF, 
+	ALLOW_ROW_LOCKS = ON, 
+	ALLOW_PAGE_LOCKS = ON, 
+	OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+Step 7:
+Edit csProj
+
+Go to ` <InvariantGlobalization>true</InvariantGlobalization>`
+Set false.
+https://docs.telerik.com/reporting/knowledge-base/only-invariant-culture-is-supported-in-globalization-invariant-mode-error
